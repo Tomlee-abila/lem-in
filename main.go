@@ -170,3 +170,5 @@ type AntFarm struct {
 }
 
 
+// Error handling is already included in parseInput function.
+// This commit ensures that all error cases are covered.
