@@ -155,6 +155,18 @@ func simulateAnts(antFarm *AntFarm, path []string) {
 	}
 }
 
+type Room struct {
+	Name  string
+	X, Y  int
+	Links []string
+}
 
+type AntFarm struct {
+	Ants    int
+	Rooms   map[string]*Room
+	Start   string
+	End     string
+	Tunnels []string
+}
 
 
