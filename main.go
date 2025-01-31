@@ -93,3 +93,42 @@ func parseInput(filename string) (*AntFarm, error) {
 
 	return antFarm, nil
 }
+
+func parseRoom(line string) *Room {
+	parts := strings.Fields(line)
+	x, _ := strconv.Atoi(parts[1])
+	y, _ := strconv.Atoi(parts[2])
+	return &Room{Name: parts[0], X: x, Y: y}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
