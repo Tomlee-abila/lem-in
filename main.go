@@ -101,7 +101,6 @@ func parseRoom(line string) *Room {
 	return &Room{Name: parts[0], X: x, Y: y}
 }
 
-
 func findShortestPath(antFarm *AntFarm) []string {
 	// Use BFS to find the shortest path
 	visited := make(map[string]bool)
@@ -133,18 +132,17 @@ func findShortestPath(antFarm *AntFarm) []string {
 	return nil
 }
 
-
 func simulateAnts(antFarm *AntFarm, path []string) {
 	ants := make([]int, antFarm.Ants)
 	for i := range ants {
-		ants[i] = 1 // Ants start at the first room in the path
+		ants[i] = 0 // Ants start at the first room in the path
 	}
 
 	for {
 		moves := []string{}
 		for i := range ants {
-			if ants[i] < len(path) {
-				moves = append(moves, fmt.Sprintf("L%d-%s", i+1, path[ants[i]]))
+			if ants[i] < len(path)-1 {
+				moves = append(moves, fmt.Sprintf("L%d-%s", i+1, path[ants[i]+1]))
 				ants[i]++
 			}
 		}
@@ -168,7 +166,3 @@ type AntFarm struct {
 	End     string
 	Tunnels []string
 }
-
-
-// Error handling is already included in parseInput function.
-// This commit ensures that all error cases are covered.
