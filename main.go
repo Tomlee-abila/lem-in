@@ -133,23 +133,48 @@ func findShortestPath(antFarm *AntFarm) []string {
 }
 
 func simulateAnts(antFarm *AntFarm, path []string) {
+	// Initialize ants' positions at the start room
 	ants := make([]int, antFarm.Ants)
 	for i := range ants {
-		ants[i] = 0 // Ants start at the first room in the path
+		ants[i] = 0 // All ants start at the first room in the path
 	}
 
+	// Create a map to track the occupancy of rooms
+	roomOccupancy := make(map[string]int)
+	for i := 0; i < antFarm.Ants; i++ {
+		roomOccupancy[path[0]]++ // Start room can have multiple ants
+	}
+
+	turn := 0 // Initialize turn counter
 	for {
 		moves := []string{}
+		// Track which rooms are occupied after this turn
+		newOccupancy := make(map[string]int)
+
 		for i := range ants {
-			if ants[i] < len(path)-1 {
-				moves = append(moves, fmt.Sprintf("L%d-%s", i+1, path[ants[i]+1]))
-				ants[i]++
+			if ants[i] < len(path)-1 { // Ensure the ant can move
+				nextRoom := path[ants[i]+1]
+				if roomOccupancy[nextRoom] == 0 { // Check if the next room is empty
+					moves = append(moves, fmt.Sprintf("L%d-%s", i+1, nextRoom))
+					ants[i]++ // Move the ant to the next room
+					newOccupancy[nextRoom]++ // Mark the next room as occupied
+				}
 			}
 		}
-		if len(moves) == 0 {
-			break
+
+		// Update room occupancy for the next turn
+		for room, count := range roomOccupancy {
+			newOccupancy[room] += count
 		}
-		fmt.Println(strings.Join(moves, " "))
+		roomOccupancy = newOccupancy
+
+		if len(moves) == 0 {
+			break // No more moves possible
+		}
+
+		// Print the moves for the current turn
+		fmt.Printf("Turn %d: %s\n", turn+1, strings.Join(moves, " "))
+		turn++ // Increment turn counter
 	}
 }
 
