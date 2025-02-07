@@ -14,4 +14,6 @@ type AntFarm struct {
 	Start   string
 	End     string
 	Tunnels []string
+	Paths      [][]string
+	ValidPaths [][]string
 }
