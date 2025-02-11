@@ -23,12 +23,12 @@ func main() {
 	}
 
 	// Find the shortest path
-	path := pathfinding.FindShortestPath(antFarm)
-	if len(path) == 0 {
-		fmt.Println("ERROR: No path found from start to end")
-		return
-	}
+	pathfinding.FindShortestPath(antFarm)
+
+	// fmt.Println("AntFarm\n",antFarm.ValidPaths)
+	fmt.Println()
+	
 
 	// Simulate ant movement
-	simulation.SimulateAnts(antFarm, path)
+	simulation.SimulateAnts(antFarm)
 }

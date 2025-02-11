@@ -19,8 +19,9 @@ func SimulateAnts(antFarm *types.AntFarm) {
 		for index >= pathLength {
 			index -= pathLength
 		}
-		antPaths = append(antPaths, antFarm.ValidPaths[index])
+		antPaths = append(antPaths, antFarm.ValidPaths[index][1:])
 	}
+	// fmt.Println("antPaths\n",antPaths)
 	change := true
 
 	for change {
@@ -30,8 +31,9 @@ func SimulateAnts(antFarm *types.AntFarm) {
 			if i < pathCount {
 				if len(antPaths[i]) > 0 {
 					change = true
-					fmt.Printf("L%d - %s ", i+1, antPaths[i][0])
-					antPaths = antPaths[1:]
+					fmt.Printf("L%d-%s ", i+1, antPaths[i][0])
+					antPaths[i] = antPaths[i][1:]
+					
 				}
 			}
 		}
