@@ -1,6 +1,7 @@
 package pathfinding
 
 import (
+	"fmt"
 	"strings"
 
 	"ant-colony/types"
@@ -8,31 +9,43 @@ import (
 
 // Uses BFS to find the shortest path from start to end
 func FindShortestPath(antFarm *types.AntFarm) []string {
-	visited := make(map[string]bool)
-	queue := [][]string{{antFarm.Start}}
+	// Parse input paths
+	for _, t := range antFarm.Tunnels {
+		r := strings.Split(t, "-")
 
-	for len(queue) > 0 {
-		path := queue[0]
-		queue = queue[1:]
-		lastRoom := path[len(path)-1]
-
-		if lastRoom == antFarm.End {
-			return path
-		}
-
-		for _, tunnel := range antFarm.Tunnels {
-			rooms := strings.Split(tunnel, "-")
-			if rooms[0] == lastRoom && !visited[rooms[1]] {
-				visited[rooms[1]] = true
-				newPath := append(path, rooms[1])
-				queue = append(queue, newPath)
-			} else if rooms[1] == lastRoom && !visited[rooms[0]] {
-				visited[rooms[0]] = true
-				newPath := append(path, rooms[0])
-				queue = append(queue, newPath)
+		for _, room := range r {
+			if _, exists := antFarm.Rooms[room]; !exists {
+				antFarm.Rooms[room] = &types.Room{Name: room}
 			}
 		}
+
+		antFarm.Rooms[r[0]].Links = appendIfNotExists(antFarm.Rooms[r[0]].Links, r[1])
+		antFarm.Rooms[r[1]].Links = appendIfNotExists(antFarm.Rooms[r[1]].Links, r[0])
 	}
 
+	antFarm.FindPaths(antFarm.Start, []string{antFarm.Start})
+
+	fmt.Println("All Paths:")
+	for i, path := range antFarm.Paths {
+		fmt.Println(i, ":", path)
+	}
+	fmt.Println("done")
+
+	antFarm.RemoveInvalidPaths()
+	fmt.Println("Valid Paths:", antFarm.ValidPaths)
+
+	antFarm.FindOptimalPath()
+	fmt.Println("Optimal Paths:", antFarm.ValidPaths)
+
 	return nil
+}
+
+// Append item to slice only if it doesn't exist
+func appendIfNotExists(slice []string, item string) []string {
+	for _, v := range slice {
+		if v == item {
+			return slice
+		}
+	}
+	return append(slice, item)
 }

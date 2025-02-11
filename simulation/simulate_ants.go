@@ -2,29 +2,40 @@ package simulation
 
 import (
 	"fmt"
-	"strings"
 
 	"ant-colony/types"
 )
 
 // Simulates the movement of ants along the shortest path
-func SimulateAnts(antFarm *types.AntFarm, path []string) {
-	ants := make([]int, antFarm.Ants)
-	for i := range ants {
-		ants[i] = 1 // Ants start at the first room in the path
-	}
+func SimulateAnts(antFarm *types.AntFarm) {
+	antPaths := [][]string{}
 
-	for {
-		moves := []string{}
-		for i := range ants {
-			if ants[i] < len(path) {
-				moves = append(moves, fmt.Sprintf("L%d-%s", i+1, path[ants[i]]))
-				ants[i]++
+	ants := antFarm.Ants
+	pathLength := len(antFarm.ValidPaths)
+	pathCount := pathLength
+
+	for i := 0; i < ants; i++ {
+		index := i
+		for index >= pathLength {
+			index -= pathLength
+		}
+		antPaths = append(antPaths, antFarm.ValidPaths[index])
+	}
+	change := true
+
+	for change {
+		change = false
+
+		for i := range antPaths {
+			if i < pathCount {
+				if len(antPaths[i]) > 0 {
+					change = true
+					fmt.Printf("L%d - %s ", i+1, antPaths[i][0])
+					antPaths = antPaths[1:]
+				}
 			}
 		}
-		if len(moves) == 0 {
-			break
-		}
-		fmt.Println(strings.Join(moves, " "))
+		pathCount += pathLength
+		fmt.Println()
 	}
 }
