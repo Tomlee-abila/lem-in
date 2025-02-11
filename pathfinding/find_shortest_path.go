@@ -8,7 +8,7 @@ import (
 )
 
 // Uses BFS to find the shortest path from start to end
-func FindShortestPath(antFarm *types.AntFarm) {
+func FindShortestPath(antFarm *types.AntFarm) error{
 	// Parse input paths
 	for _, t := range antFarm.Tunnels {
 		r := strings.Split(t, "-")
@@ -26,8 +26,7 @@ func FindShortestPath(antFarm *types.AntFarm) {
 	antFarm.FindPaths(antFarm.Start, []string{antFarm.Start})
 
 	if len(antFarm.Paths) == 0 {
-		fmt.Println("ERROR: No path found from start to end")
-		return
+		return fmt.Errorf("ERROR: invalid data format, there are no paths available")
 	}
 
 	// fmt.Println("All Paths:")
@@ -40,6 +39,7 @@ func FindShortestPath(antFarm *types.AntFarm) {
 
 	antFarm.FindOptimalPath()
 	// fmt.Println("Optimal Paths:", antFarm.ValidPaths)
+	return nil
 }
 
 // Append item to slice only if it doesn't exist

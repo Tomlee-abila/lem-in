@@ -16,18 +16,21 @@ func main() {
 	}
 
 	filename := os.Args[1]
-	antFarm, err := parser.ParseInput(filename)
+	antFarm, fileContent, err := parser.ParseInput(filename)
 	if err != nil {
-		fmt.Println("ERROR:", err)
+		fmt.Println(err)
 		return
 	}
 
 	// Find the shortest path
-	pathfinding.FindShortestPath(antFarm)
-
+	err = pathfinding.FindShortestPath(antFarm)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	// fmt.Println("AntFarm\n",antFarm.ValidPaths)
-	fmt.Println()
 	
+	fmt.Println(fileContent+"\n")
 
 	// Simulate ant movement
 	simulation.SimulateAnts(antFarm)

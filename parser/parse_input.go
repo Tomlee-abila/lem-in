@@ -11,10 +11,10 @@ import (
 )
 
 // Parses the input file and returns the AntFarm structure
-func ParseInput(filename string) (*types.AntFarm, error) {
+func ParseInput(filename string) (*types.AntFarm, string, error){
 	file, err := os.Open(filename)
 	if err != nil {
-		return nil, fmt.Errorf("failed to open file: %v", err)
+		return nil,"", fmt.Errorf("failed to open file: %v", err)
 	}
 	defer file.Close()
 
@@ -23,13 +23,13 @@ func ParseInput(filename string) (*types.AntFarm, error) {
 
 	// Read number of ants
 	if !scanner.Scan() {
-		return nil, fmt.Errorf("ERROR: invalid data format, no ants found")
+		return nil, "",fmt.Errorf("ERROR: invalid data format, no ants found")
 	}
 	ants, err := strconv.Atoi(scanner.Text())
 	fileContent := ""
 	fileContent += strconv.Itoa(ants)
 	if err != nil || ants <= 1 {
-		return nil, fmt.Errorf("ERROR: invalid data format, invalid number of ants")
+		return nil,"", fmt.Errorf("ERROR: invalid data format, invalid number of ants")
 	}
 	antFarm.Ants = ants
 
@@ -43,7 +43,7 @@ func ParseInput(filename string) (*types.AntFarm, error) {
 
 		if strings.HasPrefix(line, "##start") {
 			if !scanner.Scan() {
-				return nil, fmt.Errorf("ERROR: invalid data format, no start room found")
+				return nil,"", fmt.Errorf("ERROR: invalid data format, no start room found")
 			}
 			startRoom := ParseRoom(scanner.Text())
 			fileContent += "\n"+startRoom.Name+" "+strconv.Itoa(startRoom.X)+" "+strconv.Itoa(startRoom.Y)
@@ -51,7 +51,7 @@ func ParseInput(filename string) (*types.AntFarm, error) {
 			antFarm.Rooms[startRoom.Name] = startRoom
 		} else if strings.HasPrefix(line, "##end") {
 			if !scanner.Scan() {
-				return nil, fmt.Errorf("ERROR: invalid data format, no end room found")
+				return nil,"", fmt.Errorf("ERROR: invalid data format, no end room found")
 			}
 			endRoom := ParseRoom(scanner.Text())
 			fileContent += "\n"+endRoom.Name+" "+strconv.Itoa(endRoom.X)+" "+strconv.Itoa(endRoom.Y)
@@ -67,10 +67,9 @@ func ParseInput(filename string) (*types.AntFarm, error) {
 
 	// Validate start and end rooms
 	if antFarm.Start == "" || antFarm.End == "" {
-		return nil, fmt.Errorf("ERROR: invalid data format, start or end room missing")
+		return nil,"", fmt.Errorf("ERROR: invalid data format, start or end room missing")
 	}
 
-	fmt.Println(fileContent)
-	return antFarm, nil
+	return antFarm, fileContent, nil
 }
 
