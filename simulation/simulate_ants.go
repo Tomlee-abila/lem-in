@@ -25,20 +25,30 @@ func SimulateAnts(antFarm *types.AntFarm) {
 		lPaths[index]++
 	}
 	// fmt.Println("antPaths\n",antPaths)
+	fullRoom := make(map[string]bool)
+	paths := make(map[int]string)
 	change := true
-
+	count := 0
 	for change {
+		count++
 		change = false
-
+		c := 0
 		for i := range antPaths {
-			if i < pathCount {
-				if len(antPaths[i]) > 0 {
+			if c < pathCount {
+				if len(antPaths[i]) > 0 && !fullRoom[antPaths[i][0]]{
 					change = true
 					fmt.Printf("L%d-%s ", i+1, antPaths[i][0])
+					fullRoom[paths[i]] = false
+					if antPaths[i][0] != antFarm.End{
+						fullRoom[antPaths[i][0]] = true
+					}					
+					paths[i] = antPaths[i][0]
 					antPaths[i] = antPaths[i][1:]
-
+					c++
 				}
+				
 			}
+			
 		}
 		pathCount += pathLength
 		fmt.Println()
