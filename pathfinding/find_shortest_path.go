@@ -29,10 +29,10 @@ func FindShortestPath(antFarm *types.AntFarm) error{
 		return fmt.Errorf("ERROR: invalid data format, there are no paths available")
 	}
 
-	// fmt.Println("All Paths:")
-	// for i, path := range antFarm.Paths {
-	// 	fmt.Println(i, ":", path)
-	// }
+	fmt.Println("All Paths:")
+	for i, path := range antFarm.Paths {
+		fmt.Println(i, ":", path)
+	}
 
 	antFarm.RemoveInvalidPaths()
 	// fmt.Println("Valid Paths:", antFarm.ValidPaths)
